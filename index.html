@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rest Crud</title>
+  </head>
+  <body>
+    <h1>REST</h1>
+    <button onclick="get()">GET</button>
+    <button onclick="postSiteBlogPost()">POST</button>
+    <button onclick="putFirstBlogPost()">PUT</button>
+    <button onclick="deleteFirstBlogPost()">DELETE</button>
+    <script>
+      function get() {
+        fetch(
+          "http://localhost:8080/o/headless-delivery/v1.0/sites/20122/blog-postings",
+          {
+            method: "GET",
+            headers: {
+              Authorization: "Basic " + btoa("test@liferay.com:teste"),
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data.items);
+          });
+      }
+
+      function postSiteBlogPost() {
+        fetch(
+          "http://localhost:8080/o/headless-delivery/v1.0/sites/20122/blog-postings",
+          {
+            method: "POST",
+            headers: {
+              Authorization: "Basic " + btoa("test@liferay.com:teste"),
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              headline: "TEST",
+              articleBody: "Article via REST services.",
+            }),
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            return data.id;
+          });
+      }
+
+      function putBlogPost(id) {
+        fetch(
+          `http://localhost:8080/o/headless-delivery/v1.0/blog-postings/${id}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: "Basic " + btoa("test@liferay.com:teste"),
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              headline: "Updated TESTE",
+              articleBody: "updated Article via REST services.",
+            }),
+          }
+        ).then((res) => console.log(res.json()));
+      }
+
+      function deleteBlogPost(id) {
+        fetch(
+          `http://localhost:8080/o/headless-delivery/v1.0/blog-postings/${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: "Basic " + btoa("test@liferay.com:teste"),
+            },
+          }
+        ).then((res) => console.log(res));
+      }
+
+      function getFirstBlogPost() {
+        fetch(
+          "http://localhost:8080/o/headless-delivery/v1.0/sites/20122/blog-postings",
+          {
+            method: "GET",
+            headers: {
+              Authorization: "Basic " + btoa("test@liferay.com:teste"),
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data.items[0].id);
+            return await data.items[0].id;
+          });
+      }
+
+      function deleteFirstBlogPost() {
+        let id = getFirstBlogPost();
+        console.log(id);
+        deleteBlogPost(id);
+      }
+
+      function putFirstBlogPost() {
+        let id = getFirstBlogPost();
+        console.log(id);
+
+        putBlogPost(id);
+      }
+    </script>
+  </body>
+</html>
