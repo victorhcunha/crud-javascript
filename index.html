@@ -7,13 +7,9 @@
     <title>Rest Crud</title>
   </head>
   <body>
-    <h1>REST</h1>
-    <button onclick="get()">GET</button>
-    <button onclick="postSiteBlogPost()">POST</button>
-    <button onclick="putFirstBlogPost()">PUT</button>
-    <button onclick="deleteFirstBlogPost()">DELETE</button>
     <script>
-      function get() {
+      //getAll
+      function getSiteBlogpost() {
         fetch(
           "http://localhost:8080/o/headless-delivery/v1.0/sites/20122/blog-postings",
           {
@@ -29,6 +25,24 @@
           });
       }
 
+      //getByID
+      function getBlogpost(id) {
+        fetch(
+          `http://localhost:8080/o/headless-delivery/v1.0/blog-postings/${id}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: "Basic " + btoa("test@liferay.com:teste"),
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          });
+      }
+
+      //post
       function postSiteBlogPost() {
         fetch(
           "http://localhost:8080/o/headless-delivery/v1.0/sites/20122/blog-postings",
@@ -51,6 +65,7 @@
           });
       }
 
+      //put
       function putBlogPost(id) {
         fetch(
           `http://localhost:8080/o/headless-delivery/v1.0/blog-postings/${id}`,
@@ -68,6 +83,7 @@
         ).then((res) => console.log(res.json()));
       }
 
+      //delete
       function deleteBlogPost(id) {
         fetch(
           `http://localhost:8080/o/headless-delivery/v1.0/blog-postings/${id}`,
@@ -93,22 +109,17 @@
           .then((res) => res.json())
           .then((data) => {
             console.log(data.items[0].id);
-            return await data.items[0].id;
+            let vari = data.items[0].id;
+            console.log(vari);
+            return vari;
           });
       }
-
-      function deleteFirstBlogPost() {
-        let id = getFirstBlogPost();
-        console.log(id);
-        deleteBlogPost(id);
-      }
-
-      function putFirstBlogPost() {
-        let id = getFirstBlogPost();
-        console.log(id);
-
-        putBlogPost(id);
-      }
     </script>
+    <h1>REST</h1>
+    <button onclick="getSiteBlogpost()">GET</button>
+    <button onclick="getBlogpost()">GET unique</button>
+    <button onclick="postSiteBlogPost()">POST</button>
+    <button onclick="putBlogPost()">PUT</button>
+    <button onclick="deleteBlogPost()">DELETE</button>
   </body>
 </html>
